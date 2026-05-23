@@ -1,0 +1,615 @@
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barnehagekaos</title>
+  <style>
+    :root {
+      --bg: #f5efe3;
+      --card: #fffaf0;
+      --text: #2f261f;
+      --muted: #7a6a5c;
+      --line: #e5d7c4;
+      --danger: #c0392b;
+      --good: #2e7d32;
+      --blue: #2f80ed;
+      --yellow: #f2c94c;
+      --shadow: 0 16px 40px rgba(47, 38, 31, 0.12);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(242, 201, 76, 0.28), transparent 28%),
+        radial-gradient(circle at 90% 30%, rgba(47, 128, 237, 0.16), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      padding: 22px;
+    }
+
+    .app {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+
+    header, .stat, .panel {
+      background: rgba(255, 250, 240, 0.9);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    header { padding: 22px; }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 5vw, 5rem);
+      line-height: 0.9;
+      letter-spacing: -0.07em;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 850px;
+    }
+
+    .top-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .stat { padding: 16px; }
+
+    .label {
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 800;
+    }
+
+    .value {
+      font-size: 1.8rem;
+      font-weight: 950;
+      margin-top: 4px;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 18px;
+    }
+
+    .panel { padding: 18px; }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+    }
+
+    .pot-area {
+      min-height: 320px;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 14px;
+    }
+
+    .phase-banner {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #efe1c8;
+      font-weight: 900;
+      color: #5a4636;
+    }
+
+    .phase-banner.danger {
+      background: #ffe1dd;
+      color: var(--danger);
+    }
+
+    .meter-title {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .meter {
+      height: 18px;
+      background: #eadfce;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    .meter-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--good), var(--yellow), var(--danger));
+      transition: width 220ms ease;
+    }
+
+    .drawn {
+      align-content: start;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      min-height: 210px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.44);
+      border: 1px dashed #d7c5ae;
+    }
+
+    .empty-hint {
+      color: var(--muted);
+      font-weight: 700;
+      padding: 20px;
+    }
+
+    .chip {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 8px;
+      font-size: 0.72rem;
+      font-weight: 950;
+      border: 3px solid rgba(0,0,0,0.12);
+      box-shadow: 0 8px 16px rgba(47, 38, 31, 0.15);
+      animation: pop 180ms ease-out;
+      position: relative;
+    }
+
+    .chip small {
+      display: block;
+      font-size: 1.05rem;
+      line-height: 1;
+    }
+
+    .chip.white { background: #f8f8f8; }
+    .chip.red { background: #ffb3a8; }
+    .chip.blue { background: #b8d7ff; }
+    .chip.green { background: #bdf0c9; }
+    .chip.yellow { background: #ffeaa2; }
+    .chip.purple { background: #dfc3ff; }
+
+    @keyframes pop {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 16px;
+      padding: 15px 16px;
+      font-weight: 950;
+      font-size: 1rem;
+      cursor: pointer;
+      color: white;
+      background: #2f261f;
+      box-shadow: 0 10px 22px rgba(47, 38, 31, 0.18);
+      transition: transform 120ms ease, opacity 120ms ease;
+    }
+
+    button:hover:not(:disabled) { transform: translateY(-1px); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .btn-stop { background: var(--good); }
+    .btn-next { background: var(--blue); }
+    .btn-reset { background: #8c6f5a; }
+    .btn-buy { background: #7048a8; padding: 10px 12px; font-size: 0.88rem; }
+
+    .side {
+      display: grid;
+      gap: 18px;
+    }
+
+    .shop {
+      display: grid;
+      gap: 10px;
+    }
+
+    .shop-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .shop-chip {
+      width: 46px;
+      height: 46px;
+      font-size: 0.58rem;
+      box-shadow: none;
+    }
+
+    .shop-title {
+      font-weight: 950;
+      line-height: 1.1;
+    }
+
+    .shop-desc {
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-top: 2px;
+    }
+
+    .log {
+      display: grid;
+      gap: 8px;
+      max-height: 220px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .log p {
+      margin: 0;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .rules {
+      color: var(--muted);
+      line-height: 1.45;
+      font-weight: 650;
+      margin: 0;
+    }
+
+    @media (max-width: 850px) {
+      body { padding: 12px; }
+      .top-stats { grid-template-columns: repeat(2, 1fr); }
+      main { grid-template-columns: 1fr; }
+      .actions { grid-template-columns: 1fr 1fr; }
+      .chip { width: 68px; height: 68px; font-size: 0.65rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <h1>Barnehagekaos</h1>
+      <p class="subtitle">En helt vanlig tirsdag. Trekk barn fra garderoben, bygg en bedre avdeling og stopp før kaoset koker over.</p>
+    </header>
+
+    <section class="top-stats">
+      <div class="stat">
+        <div class="label">Runde</div>
+        <div class="value" id="roundValue">1 / 7</div>
+      </div>
+      <div class="stat">
+        <div class="label">Trygghetspoeng</div>
+        <div class="value" id="scoreValue">0</div>
+      </div>
+      <div class="stat">
+        <div class="label">Klistremerker</div>
+        <div class="value" id="moneyValue">0</div>
+      </div>
+      <div class="stat">
+        <div class="label">Brikker i pose</div>
+        <div class="value" id="bagValue">9</div>
+      </div>
+    </section>
+
+    <main>
+      <section class="panel pot-area">
+        <div>
+          <h2>Dagens avdeling</h2>
+          <div id="phaseBanner" class="phase-banner">Trekk en brikke. Stopp mens du fortsatt har kontroll.</div>
+        </div>
+
+        <div>
+          <div class="meter-title">
+            <span>Garderobekaos</span>
+            <span id="chaosText">0 / 8</span>
+          </div>
+          <div class="meter"><div class="meter-fill" id="chaosFill"></div></div>
+        </div>
+
+        <div class="drawn" id="drawnArea">
+          <div class="empty-hint">Ingen barn i gryta ennå. Mistenkelig rolig.</div>
+        </div>
+
+        <div class="actions">
+          <button id="drawBtn">Trekk barn</button>
+          <button id="stopBtn" class="btn-stop">Stopp dagen</button>
+          <button id="nextBtn" class="btn-next" disabled>Neste runde</button>
+          <button id="resetBtn" class="btn-reset">Start på nytt</button>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="panel">
+          <h2>Kjøp bedre avdeling</h2>
+          <div class="shop" id="shop"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Hva skjer?</h2>
+          <div class="log" id="log"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Regler</h2>
+          <p class="rules">
+            Hvite brikker gir garderobekaos. Over 8 kaos, så koker avdelingen over. Da får du klistremerker, men ingen trygghetspoeng denne runden. Stopper du i tide, får du begge deler.
+          </p>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const CHIP_TYPES = {
+      chaos1: { name: "Borte vott", emoji: "🧤", color: "white", chaos: 1, value: 1, cost: 0 },
+      chaos2: { name: "Våt sokk", emoji: "🧦", color: "white", chaos: 2, value: 2, cost: 0 },
+      chaos3: { name: "Hvor er buksa?", emoji: "👖", color: "white", chaos: 3, value: 3, cost: 0 },
+      red2: { name: "Turbo-barn", emoji: "🏃", color: "red", chaos: 0, value: 2, cost: 4, desc: "+2 klistremerker" },
+      blue2: { name: "Rolig bygger", emoji: "🧱", color: "blue", chaos: 0, value: 2, cost: 5, desc: "+2 og demper 1 kaos" },
+      green3: { name: "Hjelpsom femåring", emoji: "🤝", color: "green", chaos: 0, value: 3, cost: 6, desc: "+3 klistremerker" },
+      yellow4: { name: "Alle har sekk", emoji: "🎒", color: "yellow", chaos: 0, value: 4, cost: 8, desc: "+4 klistremerker" },
+      purple5: { name: "Magisk vikar", emoji: "🦸", color: "purple", chaos: 0, value: 5, cost: 10, desc: "+5 og demper 2 kaos" }
+    };
+
+    const START_BAG = ["chaos1", "chaos1", "chaos1", "chaos1", "chaos2", "chaos2", "chaos3", "red2", "green3"];
+    const MAX_CHAOS = 8;
+    const MAX_ROUNDS = 7;
+
+    let state;
+
+    const els = {
+      round: document.getElementById("roundValue"),
+      score: document.getElementById("scoreValue"),
+      money: document.getElementById("moneyValue"),
+      bag: document.getElementById("bagValue"),
+      chaosText: document.getElementById("chaosText"),
+      chaosFill: document.getElementById("chaosFill"),
+      drawn: document.getElementById("drawnArea"),
+      log: document.getElementById("log"),
+      banner: document.getElementById("phaseBanner"),
+      drawBtn: document.getElementById("drawBtn"),
+      stopBtn: document.getElementById("stopBtn"),
+      nextBtn: document.getElementById("nextBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      shop: document.getElementById("shop")
+    };
+
+    function freshState() {
+      return {
+        round: 1,
+        score: 0,
+        money: 0,
+        bag: [...START_BAG],
+        drawPile: shuffle([...START_BAG]),
+        drawn: [],
+        chaos: 0,
+        phase: "draw",
+        exploded: false,
+        gameOver: false
+      };
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function addLog(text) {
+      const p = document.createElement("p");
+      p.textContent = text;
+      els.log.prepend(p);
+    }
+
+    function drawChip() {
+      if (state.phase !== "draw" || state.gameOver) return;
+
+      if (state.drawPile.length === 0) {
+        addLog("Posen er tom. Litt skummelt effektiv dag, faktisk.");
+        stopDay();
+        return;
+      }
+
+      const id = state.drawPile.pop();
+      const chip = CHIP_TYPES[id];
+
+      state.drawn.push(id);
+      state.chaos += chip.chaos;
+
+      if (id === "blue2") state.chaos = Math.max(0, state.chaos - 1);
+      if (id === "purple5") state.chaos = Math.max(0, state.chaos - 2);
+
+      addLog(`${chip.name}: ${chip.chaos ? "+" + chip.chaos + " kaos" : "+" + chip.value + " klistremerker"}.`);
+
+      if (state.chaos > MAX_CHAOS) explodeDay();
+
+      render();
+    }
+
+    function currentRoundValue() {
+      return state.drawn.reduce((sum, id) => sum + CHIP_TYPES[id].value, 0);
+    }
+
+    function explodeDay() {
+      state.phase = "buy";
+      state.exploded = true;
+      const stickers = Math.max(1, Math.floor(currentRoundValue() / 2));
+      state.money += stickers;
+      addLog(`Avdelingen kokte over. Du får ${stickers} klistremerker, men ingen trygghetspoeng.`);
+    }
+
+    function stopDay() {
+      if (state.phase !== "draw" || state.gameOver) return;
+
+      state.phase = "buy";
+      const points = currentRoundValue();
+      const stickers = Math.max(1, Math.floor(points / 2));
+      state.score += points;
+      state.money += stickers;
+
+      addLog(`Du stoppet i tide. +${points} trygghetspoeng og +${stickers} klistremerker.`);
+      render();
+    }
+
+    function nextRound() {
+      if (state.phase !== "buy" || state.gameOver) return;
+
+      if (state.round >= MAX_ROUNDS) {
+        state.gameOver = true;
+        state.phase = "over";
+        addLog(`Ferdig! Barnehagedagen endte med ${state.score} trygghetspoeng.`);
+        render();
+        return;
+      }
+
+      state.round += 1;
+      state.drawPile = shuffle([...state.bag]);
+      state.drawn = [];
+      state.chaos = 0;
+      state.phase = "draw";
+      state.exploded = false;
+
+      addLog(`Runde ${state.round}. Ny dag, nye votter som kan forsvinne.`);
+      render();
+    }
+
+    function buyChip(id) {
+      const chip = CHIP_TYPES[id];
+
+      if (state.phase !== "buy" || state.gameOver) return;
+
+      if (state.money < chip.cost) {
+        addLog(`Du mangler klistremerker for å kjøpe ${chip.name}.`);
+        return;
+      }
+
+      state.money -= chip.cost;
+      state.bag.push(id);
+
+      addLog(`Kjøpt: ${chip.name}. Den legges i posen til neste runde.`);
+      render();
+    }
+
+    function chipEl(id, small = false) {
+      const chip = CHIP_TYPES[id];
+      const div = document.createElement("div");
+      div.className = `chip ${chip.color} ${small ? "shop-chip" : ""}`;
+      div.innerHTML = `<small>${chip.emoji}</small>${chip.name}`;
+      return div;
+    }
+
+    function renderShop() {
+      const items = ["red2", "blue2", "green3", "yellow4", "purple5"];
+      els.shop.innerHTML = "";
+
+      items.forEach(id => {
+        const chip = CHIP_TYPES[id];
+
+        const row = document.createElement("div");
+        row.className = "shop-item";
+        row.appendChild(chipEl(id, true));
+
+        const info = document.createElement("div");
+        info.innerHTML = `<div class="shop-title">${chip.name}</div><div class="shop-desc">${chip.desc} · Pris ${chip.cost}</div>`;
+        row.appendChild(info);
+
+        const btn = document.createElement("button");
+        btn.className = "btn-buy";
+        btn.textContent = "Kjøp";
+        btn.disabled = state.phase !== "buy" || state.money < chip.cost || state.gameOver;
+        btn.onclick = () => buyChip(id);
+
+        row.appendChild(btn);
+        els.shop.appendChild(row);
+      });
+    }
+
+    function render() {
+      els.round.textContent = `${state.round} / ${MAX_ROUNDS}`;
+      els.score.textContent = state.score;
+      els.money.textContent = state.money;
+      els.bag.textContent = state.bag.length;
+      els.chaosText.textContent = `${state.chaos} / ${MAX_CHAOS}`;
+      els.chaosFill.style.width = `${Math.min(100, (state.chaos / MAX_CHAOS) * 100)}%`;
+
+      els.drawn.innerHTML = "";
+
+      if (!state.drawn.length) {
+        const hint = document.createElement("div");
+        hint.className = "empty-hint";
+        hint.textContent = "Ingen barn i gryta ennå. Mistenkelig rolig.";
+        els.drawn.appendChild(hint);
+      } else {
+        state.drawn.forEach(id => els.drawn.appendChild(chipEl(id)));
+      }
+
+      els.drawBtn.disabled = state.phase !== "draw" || state.gameOver;
+      els.stopBtn.disabled = state.phase !== "draw" || state.drawn.length === 0 || state.gameOver;
+      els.nextBtn.disabled = state.phase !== "buy" || state.gameOver;
+
+      els.banner.classList.toggle("danger", state.exploded);
+
+      if (state.gameOver) {
+        els.banner.textContent = `Spillet er ferdig. Du fikk ${state.score} trygghetspoeng.`;
+      } else if (state.phase === "draw") {
+        els.banner.textContent = "Trekk en brikke. Stopp mens du fortsatt har kontroll.";
+      } else if (state.exploded) {
+        els.banner.textContent = "Avdelingen kokte over. Kjøp noe lurt før neste runde.";
+      } else {
+        els.banner.textContent = "Dagen ble reddet. Kjøp nye brikker eller gå videre.";
+      }
+
+      renderShop();
+    }
+
+    function resetGame() {
+      state = freshState();
+      els.log.innerHTML = "";
+      addLog("Velkommen til Barnehagekaos. Målet er trygghetspoeng, ikke full garderobekollaps.");
+      render();
+    }
+
+    els.drawBtn.addEventListener("click", drawChip);
+    els.stopBtn.addEventListener("click", stopDay);
+    els.nextBtn.addEventListener("click", nextRound);
+    els.resetBtn.addEventListener("click", resetGame);
+
+    resetGame();
+  </script>
+</body>
+</html>
