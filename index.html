@@ -1,748 +1,733 @@
 
+
 <!DOCTYPE html>
 <html lang="no">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Barnehagekaos</title>
-  <style>
-    :root {
-      --bg: #f5efe3;
-      --card: #fffaf0;
-      --text: #2f261f;
-      --muted: #7a6a5c;
-      --line: #e5d7c4;
-      --danger: #c0392b;
-      --good: #2e7d32;
-      --blue: #2f80ed;
-      --yellow: #f2c94c;
-      --shadow: 0 16px 40px rgba(47, 38, 31, 0.12);
-      --radius: 22px;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Barnehagekaos V3</title>
 
-    * { box-sizing: border-box; }
+<style>
+:root{
+  --bg:#f5efe3;
+  --card:#fffaf0;
+  --text:#2f261f;
+  --muted:#7a6a5c;
+  --line:#e5d7c4;
+  --danger:#c0392b;
+  --good:#2e7d32;
+  --blue:#2f80ed;
+  --yellow:#f2c94c;
+  --purple:#9b51e0;
+  --shadow:0 16px 40px rgba(47,38,31,.12);
+  --radius:22px;
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at 20% 10%, rgba(242, 201, 76, 0.28), transparent 28%),
-        radial-gradient(circle at 90% 30%, rgba(47, 128, 237, 0.16), transparent 28%),
-        var(--bg);
-      color: var(--text);
-      padding: 22px;
-    }
+*{box-sizing:border-box}
 
-    .app {
-      max-width: 1220px;
-      margin: 0 auto;
-      display: grid;
-      gap: 18px;
-    }
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(242,201,76,.25), transparent 28%),
+    radial-gradient(circle at 80% 20%, rgba(47,128,237,.14), transparent 28%),
+    var(--bg);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  padding:20px;
+}
 
-    header, .stat, .panel {
-      background: rgba(255, 250, 240, 0.92);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
+.app{
+  max-width:1280px;
+  margin:0 auto;
+  display:grid;
+  gap:18px;
+}
 
-    header { padding: 22px; }
+header,.panel,.stat{
+  background:rgba(255,250,240,.92);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
 
-    h1 {
-      margin: 0;
-      font-size: clamp(2.4rem, 5vw, 5rem);
-      line-height: 0.9;
-      letter-spacing: -0.07em;
-    }
+header{padding:22px}
 
-    .subtitle {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 1.05rem;
-      max-width: 850px;
-    }
+h1{
+  margin:0;
+  font-size:clamp(2.6rem,5vw,5rem);
+  letter-spacing:-.08em;
+  line-height:.9;
+}
 
-    .top-stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
+.subtitle{
+  margin-top:10px;
+  color:var(--muted);
+  max-width:800px;
+}
 
-    .stat { padding: 16px; }
+.top{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+}
 
-    .label {
-      color: var(--muted);
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-weight: 800;
-    }
+.stat{
+  padding:16px;
+}
 
-    .value {
-      font-size: 1.8rem;
-      font-weight: 950;
-      margin-top: 4px;
-    }
+.label{
+  font-size:.75rem;
+  color:var(--muted);
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
 
-    main {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 18px;
-    }
+.value{
+  font-size:1.9rem;
+  font-weight:950;
+  margin-top:4px;
+}
 
-    .panel { padding: 18px; }
+main{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:18px;
+}
 
-    .panel h2 {
-      margin: 0 0 12px;
-      font-size: 1.35rem;
-      letter-spacing: -0.03em;
-    }
+.panel{
+  padding:18px;
+}
 
-    .pot-area {
-      min-height: 360px;
-      display: grid;
-      grid-template-rows: auto auto 1fr auto;
-      gap: 14px;
-    }
+h2{
+  margin:0 0 12px;
+  letter-spacing:-.03em;
+}
 
-    .phase-banner {
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: #efe1c8;
-      font-weight: 900;
-      color: #5a4636;
-    }
+.banner{
+  padding:12px 14px;
+  border-radius:16px;
+  background:#efe1c8;
+  font-weight:900;
+}
 
-    .phase-banner.danger {
-      background: #ffe1dd;
-      color: var(--danger);
-    }
+.banner.danger{
+  background:#ffe1dd;
+  color:var(--danger);
+}
 
-    .meter-title {
-      display: flex;
-      justify-content: space-between;
-      color: var(--muted);
-      font-weight: 800;
-      font-size: 0.95rem;
-      margin-bottom: 8px;
-    }
+.track{
+  margin-top:12px;
+  display:flex;
+  gap:6px;
+  overflow:auto;
+  padding-bottom:6px;
+}
 
-    .meter {
-      height: 18px;
-      background: #eadfce;
-      border-radius: 999px;
-      overflow: hidden;
-      border: 1px solid var(--line);
-    }
+.space{
+  flex:0 0 58px;
+  height:72px;
+  border-radius:16px;
+  background:#f0e5d4;
+  border:1px solid #dbc8af;
+  position:relative;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  font-weight:900;
+  padding-bottom:6px;
+  color:#5e4f42;
+}
 
-    .meter-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--good), var(--yellow), var(--danger));
-      transition: width 220ms ease;
-    }
+.space.bonus{
+  background:#fff1bf;
+}
 
-    .drawn {
-      align-content: start;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      min-height: 240px;
-      padding: 14px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.44);
-      border: 1px dashed #d7c5ae;
-    }
+.space.ruby{
+  background:#dbeeff;
+}
 
-    .empty-hint {
-      color: var(--muted);
-      font-weight: 700;
-      padding: 20px;
-    }
+.space.active{
+  outline:4px solid #2f261f;
+  transform:translateY(-4px);
+}
 
-    .chip {
-      width: 82px;
-      height: 82px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      padding: 9px 7px 7px;
-      font-size: 0.68rem;
-      font-weight: 950;
-      border: 3px solid rgba(0,0,0,0.12);
-      box-shadow: 0 8px 16px rgba(47, 38, 31, 0.15);
-      animation: pop 180ms ease-out;
-      position: relative;
-      line-height: 1.05;
-    }
+.space .reward{
+  position:absolute;
+  top:4px;
+  font-size:.72rem;
+  font-weight:800;
+}
 
-    .chip .emoji {
-      display: block;
-      font-size: 1.05rem;
-      line-height: 1;
-      margin-bottom: 2px;
-    }
+.cauldron{
+  min-height:230px;
+  margin-top:14px;
+  border-radius:18px;
+  border:1px dashed #d7c5ae;
+  background:rgba(255,255,255,.45);
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-content:flex-start;
+  padding:14px;
+}
 
-    .chip .num {
-      position: absolute;
-      right: -5px;
-      top: -7px;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: #2f261f;
-      color: white;
-      font-size: 1rem;
-      border: 2px solid rgba(255,255,255,0.95);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.18);
-    }
+.empty{
+  color:var(--muted);
+  font-weight:700;
+  padding:20px;
+}
 
-    .chip .price {
-      position: absolute;
-      left: -5px;
-      bottom: -7px;
-      min-width: 34px;
-      height: 26px;
-      padding: 0 6px;
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      background: #7048a8;
-      color: white;
-      font-size: 0.78rem;
-      border: 2px solid rgba(255,255,255,0.95);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.18);
-    }
+.chip{
+  width:82px;
+  height:82px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  position:relative;
+  padding:8px;
+  font-size:.65rem;
+  font-weight:950;
+  border:3px solid rgba(0,0,0,.12);
+  box-shadow:0 8px 16px rgba(47,38,31,.15);
+}
 
-    .chip.white { background: #f8f8f8; }
-    .chip.red { background: #ffb3a8; }
-    .chip.blue { background: #b8d7ff; }
-    .chip.green { background: #bdf0c9; }
-    .chip.yellow { background: #ffeaa2; }
-    .chip.purple { background: #dfc3ff; }
+.chip .emoji{
+  font-size:1rem;
+  display:block;
+  line-height:1;
+  margin-bottom:2px;
+}
 
-    @keyframes pop {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
+.chip .num{
+  position:absolute;
+  top:-6px;
+  right:-4px;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:#2f261f;
+  color:white;
+  display:grid;
+  place-items:center;
+  font-size:1rem;
+  border:2px solid white;
+}
 
-    .actions {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
+.white{background:#f8f8f8}
+.red{background:#ffb3a8}
+.blue{background:#b8d7ff}
+.green{background:#bdf0c9}
+.yellow{background:#ffeaa2}
+.purple{background:#dfc3ff}
 
-    button {
-      border: 0;
-      border-radius: 16px;
-      padding: 15px 16px;
-      font-weight: 950;
-      font-size: 1rem;
-      cursor: pointer;
-      color: white;
-      background: #2f261f;
-      box-shadow: 0 10px 22px rgba(47, 38, 31, 0.18);
-      transition: transform 120ms ease, opacity 120ms ease;
-    }
+.controls{
+  margin-top:16px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
 
-    button:hover:not(:disabled) { transform: translateY(-1px); }
-    button:disabled { opacity: 0.45; cursor: not-allowed; }
+button{
+  border:0;
+  border-radius:16px;
+  padding:14px;
+  font-weight:950;
+  cursor:pointer;
+  color:white;
+  background:#2f261f;
+  box-shadow:0 10px 22px rgba(47,38,31,.18);
+}
 
-    .btn-stop { background: var(--good); }
-    .btn-next { background: var(--blue); }
-    .btn-reset { background: #8c6f5a; }
-    .btn-buy { background: #7048a8; padding: 10px 12px; font-size: 0.88rem; }
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
 
-    .side {
-      display: grid;
-      gap: 18px;
-    }
+.stop{background:var(--good)}
+.next{background:var(--blue)}
+.reset{background:#8c6f5a}
+.buy{background:#7048a8;padding:10px 12px;font-size:.88rem}
 
-    .shop {
-      display: grid;
-      gap: 10px;
-    }
+.side{
+  display:grid;
+  gap:18px;
+}
 
-    .shop-group-title {
-      color: var(--muted);
-      font-weight: 950;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin: 6px 0 0;
-    }
+.shop{
+  display:grid;
+  gap:10px;
+}
 
-    .shop-item {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 10px;
-      align-items: center;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.55);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-    }
+.shop-item{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:10px;
+  background:rgba(255,255,255,.55);
+  border:1px solid var(--line);
+  border-radius:18px;
+}
 
-    .shop-chip {
-      width: 56px;
-      height: 56px;
-      font-size: 0.48rem;
-      box-shadow: none;
-    }
+.log{
+  display:grid;
+  gap:8px;
+  max-height:240px;
+  overflow:auto;
+}
 
-    .shop-chip .num {
-      width: 24px;
-      height: 24px;
-      font-size: 0.85rem;
-    }
+.log p{
+  margin:0;
+  padding:10px 12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.55);
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-weight:700;
+}
 
-    .shop-chip .price {
-      height: 22px;
-      min-width: 30px;
-      font-size: 0.68rem;
-    }
-
-    .shop-title {
-      font-weight: 950;
-      line-height: 1.1;
-    }
-
-    .shop-desc {
-      color: var(--muted);
-      font-size: 0.86rem;
-      margin-top: 2px;
-    }
-
-    .log {
-      display: grid;
-      gap: 8px;
-      max-height: 220px;
-      overflow: auto;
-      padding-right: 4px;
-    }
-
-    .log p {
-      margin: 0;
-      padding: 10px 12px;
-      background: rgba(255, 255, 255, 0.55);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      color: var(--muted);
-      font-weight: 700;
-      font-size: 0.92rem;
-    }
-
-    .rules {
-      color: var(--muted);
-      line-height: 1.45;
-      font-weight: 650;
-      margin: 0;
-    }
-
-    @media (max-width: 900px) {
-      body { padding: 12px; }
-      .top-stats { grid-template-columns: repeat(2, 1fr); }
-      main { grid-template-columns: 1fr; }
-      .actions { grid-template-columns: 1fr 1fr; }
-      .chip { width: 72px; height: 72px; font-size: 0.6rem; }
-    }
-  </style>
+@media(max-width:950px){
+  .top{grid-template-columns:repeat(2,1fr)}
+  main{grid-template-columns:1fr}
+  .controls{grid-template-columns:1fr 1fr}
+}
+</style>
 </head>
 
 <body>
-  <div class="app">
-    <header>
-      <h1>Barnehagekaos</h1>
-      <p class="subtitle">En helt vanlig tirsdag. Trekk barn fra garderoben, bygg en bedre avdeling og stopp før kaoset koker over.</p>
-    </header>
 
-    <section class="top-stats">
-      <div class="stat">
-        <div class="label">Runde</div>
-        <div class="value" id="roundValue">1 / 7</div>
-      </div>
-      <div class="stat">
-        <div class="label">Trygghetspoeng</div>
-        <div class="value" id="scoreValue">0</div>
-      </div>
-      <div class="stat">
-        <div class="label">Klistremerker</div>
-        <div class="value" id="moneyValue">0</div>
-      </div>
-      <div class="stat">
-        <div class="label">Brikker i pose</div>
-        <div class="value" id="bagValue">9</div>
-      </div>
-    </section>
+<div class="app">
 
-    <main>
-      <section class="panel pot-area">
-        <div>
-          <h2>Dagens avdeling</h2>
-          <div id="phaseBanner" class="phase-banner">Trekk en brikke. Stopp mens du fortsatt har kontroll.</div>
-        </div>
+<header>
+  <h1>Barnehagekaos</h1>
+  <div class="subtitle">
+    Nå med ekte grytespor 😈 Bare én brikke til...
+  </div>
+</header>
 
-        <div>
-          <div class="meter-title">
-            <span>Garderobekaos</span>
-            <span id="chaosText">0 / 8</span>
-          </div>
-          <div class="meter"><div class="meter-fill" id="chaosFill"></div></div>
-        </div>
-
-        <div class="drawn" id="drawnArea">
-          <div class="empty-hint">Ingen barn i gryta ennå. Mistenkelig rolig.</div>
-        </div>
-
-        <div class="actions">
-          <button id="drawBtn">Trekk barn</button>
-          <button id="stopBtn" class="btn-stop">Stopp dagen</button>
-          <button id="nextBtn" class="btn-next" disabled>Neste runde</button>
-          <button id="resetBtn" class="btn-reset">Start på nytt</button>
-        </div>
-      </section>
-
-      <aside class="side">
-        <section class="panel">
-          <h2>Kjøp bedre avdeling</h2>
-          <div class="shop" id="shop"></div>
-        </section>
-
-        <section class="panel">
-          <h2>Hva skjer?</h2>
-          <div class="log" id="log"></div>
-        </section>
-
-        <section class="panel">
-          <h2>Regler</h2>
-          <p class="rules">
-            Tallet på brikken er hvor langt dagen flytter seg fremover. Hvite brikker gir like mye garderobekaos som tallet sitt. Over 8 kaos, så koker avdelingen over. Stopper du i tide får du både trygghetspoeng og klistremerker. Koker det over, får du bare klistremerker.
-          </p>
-        </section>
-      </aside>
-    </main>
+<section class="top">
+  <div class="stat">
+    <div class="label">Runde</div>
+    <div class="value" id="round">1 / 7</div>
   </div>
 
-  <script>
-    const CHIP_TYPES = {
-      w1: { name: "Borte vott", emoji: "🧤", color: "white", number: 1, chaos: 1, cost: 0 },
-      w2: { name: "Våt sokk", emoji: "🧦", color: "white", number: 2, chaos: 2, cost: 0 },
-      w3: { name: "Hvor er buksa?", emoji: "👖", color: "white", number: 3, chaos: 3, cost: 0 },
+  <div class="stat">
+    <div class="label">Trygghetspoeng</div>
+    <div class="value" id="score">0</div>
+  </div>
 
-      red1: { name: "Turbo-barn", emoji: "🏃", color: "red", number: 1, chaos: 0, cost: 4, desc: "Billig fart. Ingen ekstra effekt." },
-      red2: { name: "Turbo-barn", emoji: "🏃", color: "red", number: 2, chaos: 0, cost: 7, desc: "Mer framdrift for pengene." },
-      red4: { name: "Turbo-barn", emoji: "🏃", color: "red", number: 4, chaos: 0, cost: 12, desc: "Høy verdi, dyrere kjøp." },
+  <div class="stat">
+    <div class="label">Klistremerker</div>
+    <div class="value" id="money">0</div>
+  </div>
 
-      blue1: { name: "Rolig bygger", emoji: "🧱", color: "blue", number: 1, chaos: 0, cost: 5, desc: "Demper 1 kaos når den trekkes." },
-      blue2: { name: "Rolig bygger", emoji: "🧱", color: "blue", number: 2, chaos: 0, cost: 9, desc: "Demper 1 kaos når den trekkes." },
-      blue4: { name: "Rolig bygger", emoji: "🧱", color: "blue", number: 4, chaos: 0, cost: 15, desc: "Demper 2 kaos når den trekkes." },
+  <div class="stat">
+    <div class="label">Kaos</div>
+    <div class="value" id="chaos">0 / 8</div>
+  </div>
 
-      green1: { name: "Hjelpsom femåring", emoji: "🤝", color: "green", number: 1, chaos: 0, cost: 5, desc: "Gir +1 ekstra klistremerke hvis du stopper." },
-      green2: { name: "Hjelpsom femåring", emoji: "🤝", color: "green", number: 2, chaos: 0, cost: 8, desc: "Gir +1 ekstra klistremerke hvis du stopper." },
-      green4: { name: "Hjelpsom femåring", emoji: "🤝", color: "green", number: 4, chaos: 0, cost: 14, desc: "Gir +2 ekstra klistremerker hvis du stopper." },
+  <div class="stat">
+    <div class="label">Posisjon</div>
+    <div class="value" id="position">0</div>
+  </div>
+</section>
 
-      yellow1: { name: "Alle har sekk", emoji: "🎒", color: "yellow", number: 1, chaos: 0, cost: 6, desc: "Gir +1 trygghetspoeng hvis dagen reddes." },
-      yellow2: { name: "Alle har sekk", emoji: "🎒", color: "yellow", number: 2, chaos: 0, cost: 10, desc: "Gir +2 trygghetspoeng hvis dagen reddes." },
-      yellow4: { name: "Alle har sekk", emoji: "🎒", color: "yellow", number: 4, chaos: 0, cost: 16, desc: "Gir +3 trygghetspoeng hvis dagen reddes." },
+<main>
 
-      purple1: { name: "Magisk vikar", emoji: "🦸", color: "purple", number: 1, chaos: 0, cost: 7, desc: "Demper 2 kaos når den trekkes." },
-      purple2: { name: "Magisk vikar", emoji: "🦸", color: "purple", number: 2, chaos: 0, cost: 11, desc: "Demper 2 kaos når den trekkes." },
-      purple4: { name: "Magisk vikar", emoji: "🦸", color: "purple", number: 4, chaos: 0, cost: 18, desc: "Demper 3 kaos når den trekkes." }
-    };
+<section class="panel">
 
-    const SHOP_GROUPS = [
-      { title: "Turbo-barn", items: ["red1", "red2", "red4"] },
-      { title: "Rolig bygger", items: ["blue1", "blue2", "blue4"] },
-      { title: "Hjelpsom femåring", items: ["green1", "green2", "green4"] },
-      { title: "Alle har sekk", items: ["yellow1", "yellow2", "yellow4"] },
-      { title: "Magisk vikar", items: ["purple1", "purple2", "purple4"] }
-    ];
+  <h2>Dagens avdeling</h2>
 
-    const START_BAG = ["w1", "w1", "w1", "w1", "w2", "w2", "w3", "red1", "green1"];
-    const MAX_CHAOS = 8;
-    const MAX_ROUNDS = 7;
+  <div class="banner" id="banner">
+    Trekk en brikke. Stopp før avdelingen koker over.
+  </div>
 
-    let state;
+  <div class="track" id="track"></div>
 
-    const els = {
-      round: document.getElementById("roundValue"),
-      score: document.getElementById("scoreValue"),
-      money: document.getElementById("moneyValue"),
-      bag: document.getElementById("bagValue"),
-      chaosText: document.getElementById("chaosText"),
-      chaosFill: document.getElementById("chaosFill"),
-      drawn: document.getElementById("drawnArea"),
-      log: document.getElementById("log"),
-      banner: document.getElementById("phaseBanner"),
-      drawBtn: document.getElementById("drawBtn"),
-      stopBtn: document.getElementById("stopBtn"),
-      nextBtn: document.getElementById("nextBtn"),
-      resetBtn: document.getElementById("resetBtn"),
-      shop: document.getElementById("shop")
-    };
+  <div class="cauldron" id="drawn">
+    <div class="empty">Ingen barn i gryta ennå. Litt FOR rolig.</div>
+  </div>
 
-    function freshState() {
-      return {
-        round: 1,
-        score: 0,
-        money: 0,
-        bag: [...START_BAG],
-        drawPile: shuffle([...START_BAG]),
-        drawn: [],
-        chaos: 0,
-        phase: "draw",
-        exploded: false,
-        gameOver: false
-      };
+  <div class="controls">
+    <button id="drawBtn">Trekk barn</button>
+    <button class="stop" id="stopBtn">Stopp dagen</button>
+    <button class="next" id="nextBtn" disabled>Neste runde</button>
+    <button class="reset" id="resetBtn">Start på nytt</button>
+  </div>
+
+</section>
+
+<aside class="side">
+
+<section class="panel">
+  <h2>Kjøp bedre avdeling</h2>
+  <div class="shop" id="shop"></div>
+</section>
+
+<section class="panel">
+  <h2>Hva skjer?</h2>
+  <div class="log" id="log"></div>
+</section>
+
+</aside>
+
+</main>
+
+</div>
+
+<script>
+
+const CHIPS = {
+  w1:{name:"Borte vott",emoji:"🧤",color:"white",number:1,chaos:1,cost:0},
+  w2:{name:"Våt sokk",emoji:"🧦",color:"white",number:2,chaos:2,cost:0},
+  w3:{name:"Hvor er buksa?",emoji:"👖",color:"white",number:3,chaos:3,cost:0},
+
+  red1:{name:"Turbo-barn",emoji:"🏃",color:"red",number:1,cost:4},
+  red2:{name:"Turbo-barn",emoji:"🏃",color:"red",number:2,cost:7},
+  red4:{name:"Turbo-barn",emoji:"🏃",color:"red",number:4,cost:12},
+
+  blue1:{name:"Rolig bygger",emoji:"🧱",color:"blue",number:1,cost:5},
+  blue2:{name:"Rolig bygger",emoji:"🧱",color:"blue",number:2,cost:9},
+
+  green1:{name:"Hjelpsom femåring",emoji:"🤝",color:"green",number:1,cost:5},
+  green2:{name:"Hjelpsom femåring",emoji:"🤝",color:"green",number:2,cost:8},
+
+  yellow1:{name:"Alle har sekk",emoji:"🎒",color:"yellow",number:1,cost:6},
+  yellow2:{name:"Alle har sekk",emoji:"🎒",color:"yellow",number:2,cost:10},
+
+  purple1:{name:"Magisk vikar",emoji:"🦸",color:"purple",number:1,cost:7},
+  purple2:{name:"Magisk vikar",emoji:"🦸",color:"purple",number:2,cost:11}
+};
+
+const SHOP = [
+  "red1","red2","red4",
+  "blue1","blue2",
+  "green1","green2",
+  "yellow1","yellow2",
+  "purple1","purple2"
+];
+
+const TRACK = [
+  {points:0,money:0},
+  {points:1,money:1},
+  {points:2,money:1},
+  {points:3,money:2,ruby:true},
+  {points:4,money:2},
+  {points:5,money:3},
+  {points:6,money:3,bonus:true},
+  {points:7,money:4},
+  {points:8,money:4},
+  {points:9,money:5,ruby:true},
+  {points:10,money:5},
+  {points:11,money:6},
+  {points:12,money:6,bonus:true},
+  {points:13,money:7},
+  {points:14,money:8}
+];
+
+const START_BAG = ["w1","w1","w1","w2","w2","w3","red1","green1","yellow1"];
+
+let state;
+
+const els = {
+  round:document.getElementById("round"),
+  score:document.getElementById("score"),
+  money:document.getElementById("money"),
+  chaos:document.getElementById("chaos"),
+  position:document.getElementById("position"),
+  drawn:document.getElementById("drawn"),
+  track:document.getElementById("track"),
+  log:document.getElementById("log"),
+  shop:document.getElementById("shop"),
+  banner:document.getElementById("banner"),
+  drawBtn:document.getElementById("drawBtn"),
+  stopBtn:document.getElementById("stopBtn"),
+  nextBtn:document.getElementById("nextBtn"),
+  resetBtn:document.getElementById("resetBtn")
+};
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function freshState(){
+  return{
+    round:1,
+    score:0,
+    money:0,
+    chaos:0,
+    position:0,
+    bag:[...START_BAG],
+    drawPile:shuffle([...START_BAG]),
+    drawn:[],
+    phase:"draw",
+    exploded:false,
+    gameOver:false
+  };
+}
+
+function addLog(text){
+  const p=document.createElement("p");
+  p.textContent=text;
+  els.log.prepend(p);
+}
+
+function chipEl(id){
+  const c=CHIPS[id];
+  const div=document.createElement("div");
+  div.className=`chip ${c.color}`;
+  div.innerHTML=`
+    <span class="num">${c.number}</span>
+    <div>
+      <span class="emoji">${c.emoji}</span>
+      ${c.name}
+    </div>
+  `;
+  return div;
+}
+
+function drawChip(){
+
+  if(state.phase!=="draw") return;
+
+  if(state.drawPile.length===0){
+    stopDay();
+    return;
+  }
+
+  const id=state.drawPile.pop();
+  const c=CHIPS[id];
+
+  state.drawn.push(id);
+
+  state.position += c.number;
+
+  if(c.chaos){
+    state.chaos += c.chaos;
+    addLog(`${c.name}: +${c.chaos} kaos.`);
+  } else {
+    addLog(`${c.name} ${c.number}: flytter dagen ${c.number} felt.`);
+  }
+
+  if(id.startsWith("blue")){
+    state.chaos=Math.max(0,state.chaos-1);
+    addLog("Rolig bygger demper 1 kaos.");
+  }
+
+  if(id.startsWith("purple")){
+    state.chaos=Math.max(0,state.chaos-2);
+    addLog("Magisk vikar redder situasjonen litt.");
+  }
+
+  if(state.chaos>8){
+    explodeDay();
+  }
+
+  render();
+}
+
+function currentTrackReward(){
+  const pos=Math.min(state.position, TRACK.length-1);
+  return TRACK[pos];
+}
+
+function stopDay(){
+
+  if(state.phase!=="draw") return;
+
+  state.phase="buy";
+
+  const reward=currentTrackReward();
+
+  let bonus=0;
+
+  state.drawn.forEach(id=>{
+    if(id.startsWith("yellow")) bonus+=1;
+    if(id.startsWith("green")) state.money+=1;
+  });
+
+  state.score += reward.points + bonus;
+  state.money += reward.money;
+
+  addLog(`Du stoppet på felt ${state.position}. +${reward.points + bonus} trygghetspoeng og +${reward.money} klistremerker.`);
+
+  render();
+}
+
+function explodeDay(){
+
+  state.phase="buy";
+  state.exploded=true;
+
+  const reward=currentTrackReward();
+
+  state.money += reward.money;
+
+  addLog(`Avdelingen kokte over 😭 Du mister poengene, men beholder ${reward.money} klistremerker.`);
+
+  render();
+}
+
+function nextRound(){
+
+  if(state.phase!=="buy") return;
+
+  if(state.round>=7){
+    state.gameOver=true;
+    state.phase="over";
+    addLog(`Ferdig! Sluttscore: ${state.score}`);
+    render();
+    return;
+  }
+
+  state.round++;
+  state.chaos=0;
+  state.position=0;
+  state.drawPile=shuffle([...state.bag]);
+  state.drawn=[];
+  state.phase="draw";
+  state.exploded=false;
+
+  addLog(`Ny dag. Nye problemer.`);
+  render();
+}
+
+function buyChip(id){
+
+  const c=CHIPS[id];
+
+  if(state.money<c.cost) return;
+
+  state.money -= c.cost;
+  state.bag.push(id);
+
+  addLog(`Kjøpte ${c.name} ${c.number}.`);
+  render();
+}
+
+function renderTrack(){
+
+  els.track.innerHTML="";
+
+  TRACK.forEach((space,index)=>{
+
+    const div=document.createElement("div");
+    div.className="space";
+
+    if(space.bonus) div.classList.add("bonus");
+    if(space.ruby) div.classList.add("ruby");
+
+    if(index===Math.min(state.position,TRACK.length-1)){
+      div.classList.add("active");
     }
 
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
+    div.innerHTML=`
+      <div class="reward">${space.points}⭐ / ${space.money}🎟️</div>
+      ${index}
+    `;
 
-    function addLog(text) {
-      const p = document.createElement("p");
-      p.textContent = text;
-      els.log.prepend(p);
-    }
+    els.track.appendChild(div);
 
-    function applyDrawEffect(id) {
-      const chip = CHIP_TYPES[id];
+  });
 
-      state.chaos += chip.chaos;
+}
 
-      if (id.startsWith("blue")) {
-        const reduction = chip.number >= 4 ? 2 : 1;
-        state.chaos = Math.max(0, state.chaos - reduction);
-        addLog(`${chip.name} ${chip.number}: demper ${reduction} kaos.`);
-      }
+function renderShop(){
 
-      if (id.startsWith("purple")) {
-        const reduction = chip.number >= 4 ? 3 : 2;
-        state.chaos = Math.max(0, state.chaos - reduction);
-        addLog(`${chip.name} ${chip.number}: vikar-magi demper ${reduction} kaos.`);
-      }
-    }
+  els.shop.innerHTML="";
 
-    function drawChip() {
-      if (state.phase !== "draw" || state.gameOver) return;
+  SHOP.forEach(id=>{
 
-      if (state.drawPile.length === 0) {
-        addLog("Posen er tom. Litt skummelt effektiv dag, faktisk.");
-        stopDay();
-        return;
-      }
+    const c=CHIPS[id];
 
-      const id = state.drawPile.pop();
-      const chip = CHIP_TYPES[id];
+    const row=document.createElement("div");
+    row.className="shop-item";
 
-      state.drawn.push(id);
-      applyDrawEffect(id);
+    row.appendChild(chipEl(id));
 
-      if (chip.chaos) {
-        addLog(`${chip.name} ${chip.number}: +${chip.chaos} kaos.`);
-      } else if (!id.startsWith("blue") && !id.startsWith("purple")) {
-        addLog(`${chip.name} ${chip.number}: flytter dagen ${chip.number} frem.`);
-      }
+    const info=document.createElement("div");
+    info.innerHTML=`
+      <div style="font-weight:950">${c.name} ${c.number}</div>
+      <div style="font-size:.85rem;color:#7a6a5c">Pris ${c.cost}</div>
+    `;
 
-      if (state.chaos > MAX_CHAOS) explodeDay();
+    row.appendChild(info);
 
-      render();
-    }
+    const btn=document.createElement("button");
+    btn.className="buy";
+    btn.textContent="Kjøp";
+    btn.disabled=state.phase!=="buy" || state.money<c.cost;
+    btn.onclick=()=>buyChip(id);
 
-    function baseRoundValue() {
-      return state.drawn.reduce((sum, id) => sum + CHIP_TYPES[id].number, 0);
-    }
+    row.appendChild(btn);
 
-    function stoppedBonusPoints() {
-      return state.drawn.reduce((sum, id) => {
-        if (!id.startsWith("yellow")) return sum;
-        const n = CHIP_TYPES[id].number;
-        return sum + (n === 1 ? 1 : n === 2 ? 2 : 3);
-      }, 0);
-    }
+    els.shop.appendChild(row);
 
-    function stoppedBonusMoney() {
-      return state.drawn.reduce((sum, id) => {
-        if (!id.startsWith("green")) return sum;
-        const n = CHIP_TYPES[id].number;
-        return sum + (n === 4 ? 2 : 1);
-      }, 0);
-    }
+  });
 
-    function explodeDay() {
-      state.phase = "buy";
-      state.exploded = true;
-      const stickers = Math.max(1, Math.floor(baseRoundValue() / 2));
-      state.money += stickers;
-      addLog(`Avdelingen kokte over. Du får ${stickers} klistremerker, men ingen trygghetspoeng.`);
-    }
+}
 
-    function stopDay() {
-      if (state.phase !== "draw" || state.gameOver) return;
+function render(){
 
-      state.phase = "buy";
+  els.round.textContent=`${state.round} / 7`;
+  els.score.textContent=state.score;
+  els.money.textContent=state.money;
+  els.chaos.textContent=`${state.chaos} / 8`;
+  els.position.textContent=state.position;
 
-      const base = baseRoundValue();
-      const bonusPoints = stoppedBonusPoints();
-      const bonusMoney = stoppedBonusMoney();
-      const points = base + bonusPoints;
-      const stickers = Math.max(1, Math.floor(base / 2)) + bonusMoney;
+  renderTrack();
+  renderShop();
 
-      state.score += points;
-      state.money += stickers;
+  els.drawn.innerHTML="";
 
-      let text = `Du stoppet i tide. +${points} trygghetspoeng og +${stickers} klistremerker.`;
-      if (bonusPoints || bonusMoney) text += ` Bonus: ${bonusPoints} trygghet og ${bonusMoney} klistremerker.`;
-      addLog(text);
+  if(!state.drawn.length){
+    els.drawn.innerHTML=`<div class="empty">Ingen barn i gryta ennå. Litt FOR rolig.</div>`;
+  } else {
+    state.drawn.forEach(id=>{
+      els.drawn.appendChild(chipEl(id));
+    });
+  }
 
-      render();
-    }
+  els.drawBtn.disabled=state.phase!=="draw";
+  els.stopBtn.disabled=state.phase!=="draw";
+  els.nextBtn.disabled=state.phase!=="buy";
 
-    function nextRound() {
-      if (state.phase !== "buy" || state.gameOver) return;
+  els.banner.classList.toggle("danger",state.exploded);
 
-      if (state.round >= MAX_ROUNDS) {
-        state.gameOver = true;
-        state.phase = "over";
-        addLog(`Ferdig! Barnehagedagen endte med ${state.score} trygghetspoeng.`);
-        render();
-        return;
-      }
+  if(state.gameOver){
+    els.banner.textContent=`Spillet er ferdig. Sluttscore: ${state.score}`;
+  } else if(state.exploded){
+    els.banner.textContent="Avdelingen kokte over 😭";
+  } else if(state.phase==="buy"){
+    els.banner.textContent="Dagen er over. Kjøp nye brikker.";
+  } else {
+    els.banner.textContent="Bare én brikke til...";
+  }
 
-      state.round += 1;
-      state.drawPile = shuffle([...state.bag]);
-      state.drawn = [];
-      state.chaos = 0;
-      state.phase = "draw";
-      state.exploded = false;
+}
 
-      addLog(`Runde ${state.round}. Ny dag, nye votter som kan forsvinne.`);
-      render();
-    }
+function resetGame(){
+  state=freshState();
+  els.log.innerHTML="";
+  addLog("Velkommen til Barnehagekaos V3.");
+  render();
+}
 
-    function buyChip(id) {
-      const chip = CHIP_TYPES[id];
+els.drawBtn.onclick=drawChip;
+els.stopBtn.onclick=stopDay;
+els.nextBtn.onclick=nextRound;
+els.resetBtn.onclick=resetGame;
 
-      if (state.phase !== "buy" || state.gameOver) return;
+resetGame();
 
-      if (state.money < chip.cost) {
-        addLog(`Du mangler klistremerker for å kjøpe ${chip.name} ${chip.number}.`);
-        return;
-      }
+</script>
 
-      state.money -= chip.cost;
-      state.bag.push(id);
-
-      addLog(`Kjøpt: ${chip.name} ${chip.number}. Den legges i posen til neste runde.`);
-      render();
-    }
-
-    function chipEl(id, small = false, showPrice = false) {
-      const chip = CHIP_TYPES[id];
-      const div = document.createElement("div");
-      div.className = `chip ${chip.color} ${small ? "shop-chip" : ""}`;
-      div.innerHTML = `
-        <span class="num">${chip.number}</span>
-        ${showPrice ? `<span class="price">${chip.cost}</span>` : ""}
-        <span class="emoji">${chip.emoji}</span>
-        <span>${chip.name}</span>
-      `;
-      return div;
-    }
-
-    function renderShop() {
-      els.shop.innerHTML = "";
-
-      SHOP_GROUPS.forEach(group => {
-        const title = document.createElement("div");
-        title.className = "shop-group-title";
-        title.textContent = group.title;
-        els.shop.appendChild(title);
-
-        group.items.forEach(id => {
-          const chip = CHIP_TYPES[id];
-
-          const row = document.createElement("div");
-          row.className = "shop-item";
-          row.appendChild(chipEl(id, true, true));
-
-          const info = document.createElement("div");
-          info.innerHTML = `<div class="shop-title">${chip.name} ${chip.number}</div><div class="shop-desc">${chip.desc} · Pris ${chip.cost}</div>`;
-          row.appendChild(info);
-
-          const btn = document.createElement("button");
-          btn.className = "btn-buy";
-          btn.textContent = "Kjøp";
-          btn.disabled = state.phase !== "buy" || state.money < chip.cost || state.gameOver;
-          btn.onclick = () => buyChip(id);
-
-          row.appendChild(btn);
-          els.shop.appendChild(row);
-        });
-      });
-    }
-
-    function render() {
-      els.round.textContent = `${state.round} / ${MAX_ROUNDS}`;
-      els.score.textContent = state.score;
-      els.money.textContent = state.money;
-      els.bag.textContent = state.bag.length;
-      els.chaosText.textContent = `${state.chaos} / ${MAX_CHAOS}`;
-      els.chaosFill.style.width = `${Math.min(100, (state.chaos / MAX_CHAOS) * 100)}%`;
-
-      els.drawn.innerHTML = "";
-
-      if (!state.drawn.length) {
-        const hint = document.createElement("div");
-        hint.className = "empty-hint";
-        hint.textContent = "Ingen barn i gryta ennå. Mistenkelig rolig.";
-        els.drawn.appendChild(hint);
-      } else {
-        state.drawn.forEach(id => els.drawn.appendChild(chipEl(id)));
-      }
-
-      els.drawBtn.disabled = state.phase !== "draw" || state.gameOver;
-      els.stopBtn.disabled = state.phase !== "draw" || state.drawn.length === 0 || state.gameOver;
-      els.nextBtn.disabled = state.phase !== "buy" || state.gameOver;
-
-      els.banner.classList.toggle("danger", state.exploded);
-
-      if (state.gameOver) {
-        els.banner.textContent = `Spillet er ferdig. Du fikk ${state.score} trygghetspoeng.`;
-      } else if (state.phase === "draw") {
-        els.banner.textContent = "Trekk en brikke. Stopp mens du fortsatt har kontroll.";
-      } else if (state.exploded) {
-        els.banner.textContent = "Avdelingen kokte over. Kjøp noe lurt før neste runde.";
-      } else {
-        els.banner.textContent = "Dagen ble reddet. Kjøp nye brikker eller gå videre.";
-      }
-
-      renderShop();
-    }
-
-    function resetGame() {
-      state = freshState();
-      els.log.innerHTML = "";
-      addLog("Velkommen til Barnehagekaos. Tallet på brikken er verdien. Hvite tall er kaos.");
-      render();
-    }
-
-    els.drawBtn.addEventListener("click", drawChip);
-    els.stopBtn.addEventListener("click", stopDay);
-    els.nextBtn.addEventListener("click", nextRound);
-    els.resetBtn.addEventListener("click", resetGame);
-
-    resetGame();
-  </script>
 </body>
 </html>
